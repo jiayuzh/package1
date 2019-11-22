@@ -10,21 +10,30 @@ select_initial_centroids = function(x, k){
 
 ## Calculate the Euclidean distance between two points
 
-euclisean_distance = function(x1, x2){
-  dist = sqrt(sum(((x1 - x2)^2)))
-  return(dist)
+cppFunction('
+            double cppdist(NumericVector x1, NumericVector x2, double size){
+              double sum = 0;
+              for(int i=0; i<size; i++){
+                sum += (x1[i] - x2[i]) * (x1[i] - x2[i]);
+              }
+              return sum;
+            }
+')
+
+euclisean_distance = function(sum){
+  return(sqrt(sum))
 }
 
 ## assign points to a cluster, this is the assignment step of k-means
 ## Args:
 ## returns clusters
 
-assign_points = function(x, centroids, n, k){
+assign_points = function(x, centroids, n, k, m){
   clusters = rep(0, n)
   for(i in 1:n){
     dist = rep(0, k)
     for(j in 1:k){
-      dist[j] = euclisean_distance(x[i, , drop = F], centroids[j, , drop = F])
+      dist[j] = euclisean_distance(cppdist(x[i, , drop = F], centroids[j, , drop = F], m))
       #print("distance here and j")
       #print(j)
       #print(dist)
@@ -60,12 +69,12 @@ define_new_centroids = function(x, k, clusters, m, n){
 ## Args:
 ## returns bool: whether centroids_new and centroids_old are within tolerance
 
-check_converge = function(centroids_new, centroids_old, tolerance){
+check_converge = function(centroids_new, centroids_old, tolerance, m){
   bool = rep(0, length(centroids_new))
   for(i in 1:nrow(centroids_new)){
     #print(centroids_new)
     #print(centroids_old)
-    bool[i] = euclisean_distance(centroids_new[i, ], centroids_old[i, ])
+    bool[i] = euclisean_distance(cppdist(centroids_new[i, ], centroids_old[i, ], m))
     #print(bool)
   }
   # print(bool)
@@ -94,7 +103,7 @@ k_means_cluster = function(x, k, tolerance = 1e-5, nstart = 9){
     #print(centroids)
     for(iter in 1:100000){ # default iteration number = 100000
       # assign each points to the centrods:
-      clusters = assign_points(x, centroids, n, k)
+      clusters = assign_points(x, centroids, n, k, m)
       #print("clusters and i")
       #print(i)
       #print(clusters)
@@ -103,7 +112,7 @@ k_means_cluster = function(x, k, tolerance = 1e-5, nstart = 9){
       #print("centroids new")
       #print(centroids_new)
       # decide to terminate or not
-      if(check_converge(centroids_new, centroids, tolerance) == TRUE){
+      if(check_converge(centroids_new, centroids, tolerance, m) == TRUE){
         centroids = centroids[order(centroids[,1],centroids[,2]), ]
         #return(centroids)
         for(ind in 1:k){
@@ -119,7 +128,7 @@ k_means_cluster = function(x, k, tolerance = 1e-5, nstart = 9){
   for (ind in 1:k) {
     ult_centroids[ind, ] = matrixStats::colMedians(centroids_list[[ind]])
   }
-  ult_clusters = assign_points(x, centroids, n, k)
+  ult_clusters = assign_points(x, centroids, n, k, m)
   ult_list = list("data" = x, "clusters" = ult_clusters, "centroids" = ult_centroids)
   return(ult_list)
 
