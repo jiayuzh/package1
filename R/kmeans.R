@@ -1,4 +1,26 @@
-## Selects k raandom unique points from list of Point
+#' Algorithm for kmeans clustering of numeric matrix of data
+#'
+#'
+#' @param x A numeric matrix of data
+#' @param k A number of clusters
+#' @param tolerance A tolerance number that determines whether the centroids are converge, default is 1e-5
+#' @param nstart An iteration number since k-means clustering depends on the initial centroids, default is 9
+#' @return The original data matrix, a vector of the clusters, a matrix of the coordinates of k centroids
+#' @examples
+#' k_means_cluster(rbind(matrix(rnorm(10, sd = 0.3), ncol = 2), matrix(rnorm(10, mean = 1, sd = 0.3), ncol = 2)), k)
+#'
+
+## usethis namespace: start
+#' @useDynLib kmeansclustering, .registration = TRUE
+## usethis namespace: end
+NULL
+
+## usethis namespace: start
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
+NULL
+
+## Selects k random unique points from list of Point
 ## The initialization step of K-means clustering
 
 select_initial_centroids = function(x, k){
@@ -10,19 +32,19 @@ select_initial_centroids = function(x, k){
 
 ## Calculate the Euclidean distance between two points
 
-cppFunction('
-            double cppdist(NumericVector x1, NumericVector x2, double size){
-              double sum = 0;
-              for(int i=0; i<size; i++){
-                sum += (x1[i] - x2[i]) * (x1[i] - x2[i]);
-              }
-              return sum;
-            }
-')
+#cppFunction('
+ #           double cppdist(NumericVector x1, NumericVector x2, double size){
+  #            double sum = 0;
+   #           for(int i=0; i<size; i++){
+    #            sum += (x1[i] - x2[i]) * (x1[i] - x2[i]);
+     #         }
+      #        return sum;
+       #     }
+#')
 
-euclisean_distance = function(sum){
-  return(sqrt(sum))
-}
+#euclisean_distance = function(sum){
+#  return(sqrt(sum))
+#}
 
 ## assign points to a cluster, this is the assignment step of k-means
 ## Args:
@@ -33,12 +55,12 @@ assign_points = function(x, centroids, n, k, m){
   for(i in 1:n){
     dist = rep(0, k)
     for(j in 1:k){
-      dist[j] = euclisean_distance(cppdist(x[i, , drop = F], centroids[j, , drop = F], m))
+      dist[j] = cppdist(x[i, , drop = F], centroids[j, , drop = F], m)
       #print("distance here and j")
       #print(j)
       #print(dist)
     }
-    clusters[i] = which.min(dist) # error here
+    clusters[i] = which.min(dist)
     #print("update cluster here and i")
     #print(i)
     #print(clusters)
@@ -74,7 +96,7 @@ check_converge = function(centroids_new, centroids_old, tolerance, m){
   for(i in 1:nrow(centroids_new)){
     #print(centroids_new)
     #print(centroids_old)
-    bool[i] = euclisean_distance(cppdist(centroids_new[i, ], centroids_old[i, ], m))
+    bool[i] = cppdist(centroids_new[i, ], centroids_old[i, ], m)
     #print(bool)
   }
   # print(bool)
@@ -124,10 +146,12 @@ k_means_cluster = function(x, k, tolerance = 1e-5, nstart = 9){
       }
     }
   }
+
   ult_centroids = matrix(rep(0, k*m), k, m)
   for (ind in 1:k) {
     ult_centroids[ind, ] = matrixStats::colMedians(centroids_list[[ind]])
   }
+
   ult_clusters = assign_points(x, centroids, n, k, m)
   ult_list = list("data" = x, "clusters" = ult_clusters, "centroids" = ult_centroids)
   return(ult_list)
