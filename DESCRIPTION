@@ -10,6 +10,7 @@ License: What license is it under?
 Imports:
     matrixStats,
     Rcpp
+LinkingTo: math
 Encoding: UTF-8
 LazyData: true
 Suggests: 

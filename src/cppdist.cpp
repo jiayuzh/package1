@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include <math.h>
 using namespace Rcpp;
+using namespace math;
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
@@ -12,6 +13,12 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//' Calculate the euclidean distance between 2 points
+//'
+//' @param x1 A numeric vector of the coordinates of x1 point.
+//' @param x2 A numeric vector of the coordinates of x2 point.
+//' @param size A integer of the length of x1 or/and x2.
+//' @export
 // [[Rcpp::export]]
 double cppdist(NumericVector x1, NumericVector x2, double size){
   double sum = 0;
