@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 library(package1)
+library(matrixStats)
+library(Rcpp)
 ```
 
 To use the function `k_means_cluster`:
