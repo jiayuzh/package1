@@ -27,6 +27,7 @@ k_means_cluster(x, k)
 ```
 
 
+
 Note if the data matrix is in higher than 3-dimension, it will need more implementation to visualize.
 To includes plots if the input data matrix is in 2-dimensions:
 
@@ -75,3 +76,15 @@ plot(output$data, col = output$clusters, main = "plot of clustering on data", xl
      ylab = "output$data[,2]")
 ```
 
+## Comparison
+
+Note that K-Means clustering depends on initial centroids, and the cluster numbers are assigned randomly. The best way to evaluate the package is compare output centroids:
+
+```{r}
+c = kmeans(x, k)$centers
+c = c[order(c[,1]),]
+my_c = k_means_cluster(x, k)$centroids
+all(c - my_c < 1e-5)
+system.time(kmeans(x, k))
+system.time(k_means_cluster(x, k)$centroids)
+```
