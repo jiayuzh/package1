@@ -1,16 +1,19 @@
-Package: kmeansclustering
+Package: package1
 Type: Package
-Title: What the Package Does (Title Case)
+Title: K Means Clustering on Data Matrix
 Version: 0.1.0
 Author: Jiayu Zhang
 Maintainer: Jiayu Zhang <jiayuzh@umich.edu>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: This package inputs a numeric data matrix x and an explicit integer k for the number of clusters.
+    k means clustering includes 4 steps:
+    Initialization: Select K random "centroids" from points
+    Assignment: Each point is assigned to nearest centroids cluster using Euclidean distance.
+    Update: Calculate the cluster mean to be new centroids.
+    Repeat Assignment and Update to convergence of centroids at tolerance level (default is 1e-5).
+License: MIT + file LICENSE
 Imports:
     matrixStats,
     Rcpp
-LinkingTo: math
 Encoding: UTF-8
 LazyData: true
 Suggests: 

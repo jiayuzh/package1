@@ -14,6 +14,21 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include=FALSE}
 library(package1)
 ```
+
+To use the function `k_means_cluster`:
+
+```{r}
+x = rbind(matrix(rnorm(100, sd = 0.3), ncol = 2), matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2))
+k = 2
+k_means_cluster(x, k)
+```
+
+To includes plots if the input data matrix is in 2-dimensions:
+```{r}
+output = k_means_cluster(x, k)
+plot(output$data, col = output$clusters, main = "plot of clustering on data", xlab = "output$data[,1]", ylab = "output$data[,2]")
+```
+If the data matrix is in higher than 3-dimension, it will need more implementation to visualize.

@@ -1,7 +1,6 @@
 #include <Rcpp.h>
-#include <math.h>
 using namespace Rcpp;
-using namespace math;
+
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
@@ -25,7 +24,7 @@ double cppdist(NumericVector x1, NumericVector x2, double size){
   for(int i=0; i<size; i++){
     sum += (x1[i] - x2[i]) * (x1[i] - x2[i]);
   }
-  return sqrt(sum);
+  return sum;
 }
 
 
