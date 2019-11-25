@@ -36,14 +36,14 @@ plot(output$data, col = output$clusters, main = "plot of clustering on data", xl
      ylab = "output$data[,2]")
 ```
 
-Same dataset if choosing a higher nstart value (will sacrifice effiency for robustness):
+Same dataset if choosing a larger nstart value (will sacrifice effiency for robustness):
 ```{r}
 output = k_means_cluster(x, k, nstart = 25)
-plot(output$data, col = output$clusters, main = "plot of clustering with high nstart on data", xlab = "output$data[,1]", 
+plot(output$data, col = output$clusters, main = "plot of clustering with large nstart on data", xlab = "output$data[,1]", 
      ylab = "output$data[,2]")
 ```
 
-Same dataset if choosing a small nstart value (will sacrifice robustness, not recommended):
+Same dataset if choosing a smaller nstart value (will sacrifice robustness, not recommended):
 
 ```{r}
 output = k_means_cluster(x, k, nstart = 1)
