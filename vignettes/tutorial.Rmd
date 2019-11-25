@@ -26,9 +26,52 @@ k = 2
 k_means_cluster(x, k)
 ```
 
+
+Note if the data matrix is in higher than 3-dimension, it will need more implementation to visualize.
 To includes plots if the input data matrix is in 2-dimensions:
-```{r}
+
+```{r, echo=FALSE}
 output = k_means_cluster(x, k)
-plot(output$data, col = output$clusters, main = "plot of clustering on data", xlab = "output$data[,1]", ylab = "output$data[,2]")
+plot(output$data, col = output$clusters, main = "plot of clustering on data", xlab = "output$data[,1]", 
+     ylab = "output$data[,2]")
 ```
-If the data matrix is in higher than 3-dimension, it will need more implementation to visualize.
+
+Same dataset if choosing a higher nstart value (will sacrifice effiency for robustness):
+```{r}
+output = k_means_cluster(x, k, nstart = 25)
+plot(output$data, col = output$clusters, main = "plot of clustering with high nstart on data", xlab = "output$data[,1]", 
+     ylab = "output$data[,2]")
+```
+
+Same dataset if choosing a small nstart value (will sacrifice robustness, not recommended):
+
+```{r}
+output = k_means_cluster(x, k, nstart = 1)
+plot(output$data, col = output$clusters, main = "plot of clustering with small nstart on data", xlab = "output$data[,1]", 
+     ylab = "output$data[,2]")
+```
+
+Another example simulated data with 3-dimensions:
+
+```{r}
+x = rbind(matrix(rnorm(150, sd = 0.3), ncol = 3), matrix(rnorm(150, mean = 1, sd = 0.3), ncol = 3))
+k_means_cluster(x, k)
+```
+
+Another example simulated data with more than 2 clusters:
+```{r}
+x = rbind(matrix(rnorm(100, sd = 0.3), ncol = 2), matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2), matrix(rnorm(100, mean = 2, sd = 0.3), ncol = 2))
+k = 3
+output = k_means_cluster(x, k)
+plot(output$data, col = output$clusters, main = "plot of clustering on data", xlab = "output$data[,1]", 
+     ylab = "output$data[,2]")
+```
+
+Same dataset if the best **k** is not chosen:
+```{r}
+k = 2
+output = k_means_cluster(x, k)
+plot(output$data, col = output$clusters, main = "plot of clustering on data", xlab = "output$data[,1]", 
+     ylab = "output$data[,2]")
+```
+

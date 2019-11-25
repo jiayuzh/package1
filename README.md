@@ -2,6 +2,10 @@ K Means Package
 =========
 ---
 
+  <!-- badges: start -->
+  [![Travis build status](https://travis-ci.org/silverfoxxxx/package1.svg?branch=master)](https://travis-ci.org/silverfoxxxx/package1)
+  <!-- badges: end -->
+
 This is Jiayu's R Package
 
 License: MIT
@@ -30,8 +34,9 @@ Using the 'devtools' package:
 
     > install.packages("devtools")
     > library(devtools)
-    > install_github("silverfoxxxx/package1")
+    > devtools::install_github("silverfoxxxx/package1", build_vignettes = T)
 
+Notice that example datasets and detailed tutorial are in vignettes so please choose build_vignettes = T.
 
 # Usage #
 ---

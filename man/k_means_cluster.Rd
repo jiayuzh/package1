@@ -9,7 +9,7 @@ k_means_cluster(x, k, tolerance = 1e-5, nstart = 9)
 \arguments{
 \item{x}{A numeric matrix of data}
 
-\item{k}{A number of clusters}
+\item{k}{A number of clusters; note that only when x>>k will k-means be robust.}
 
 \item{tolerance}{A tolerance number that determines whether the centroids are converge, default is 1e-5}
 

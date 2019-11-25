@@ -6,7 +6,7 @@
 #' k_means_cluster(x, k, tolerance = 1e-5, nstart = 9)
 #'
 #' @param x A numeric matrix of data
-#' @param k A number of clusters
+#' @param k A number of clusters; note that only when x>>k will k-means be robust.
 #' @param tolerance A tolerance number that determines whether the centroids are converge, default is 1e-5
 #' @param nstart An iteration number since k-means clustering depends on the initial centroids, default is 9
 #'
@@ -87,8 +87,6 @@ define_new_centroids = function(x, k, clusters, m, n){
   for(i in 1:k){
     if(sum(clusters == i) == 1){
       centroids_new[i, ] = x[clusters == i, , drop = F]
-    }else if(sum(clusters == i) == 0){
-      centroids_new[i, ] = x[sample(1:n, 1), , drop = F]
     }else{
       centroids_new[i, ] = colMeans(x[clusters == i, , drop = F])
     }
